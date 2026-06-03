@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 
-export default function LoginPage() {
+// Выносим всю логику в отдельный компонент
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get("redirect") || "/"
@@ -38,7 +39,7 @@ export default function LoginPage() {
 
     const userId = data.user.id
 
-    // 1. Check if master
+    // 1. Проверяем мастера
     const { data: master } = await supabase
       .from("masters")
       .select("id")
@@ -51,7 +52,7 @@ export default function LoginPage() {
       return
     }
 
-    // 2. Check if admin
+    // 2. Проверяем админа
     const { data: admin } = await supabase
       .from("admin_users")
       .select("id")
@@ -64,7 +65,7 @@ export default function LoginPage() {
       return
     }
 
-    // 3. Client
+    // 3. Клиент
     if (redirectTo.includes("/admin") || redirectTo.includes("/master")) {
       router.push("/client/dashboard")
     } else {
@@ -103,5 +104,14 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+// Основная страница, которая оборачивает форму в Suspense
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Загрузка...</div>}>
+      <LoginForm />
+    </Suspense>
   )
 }
