@@ -1,0 +1,20 @@
+{
+  "node": {
+    "40a7779a724b7dad326b5295507800fb399b3386be": {
+      "workers": {
+        "app/master/working-hours/page": {
+          "moduleId": "[project]/.next-internal/server/app/master/working-hours/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/master/working-hours/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "app/master/working-hours/page.tsx"
+        }
+      },
+      "layer": {
+        "app/master/working-hours/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "app/master/working-hours/page.tsx"
+    }
+  },
+  "edge": {}
+}

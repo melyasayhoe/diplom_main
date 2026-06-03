@@ -1,0 +1,50 @@
+{
+  "node": {
+    "4084d3249a982b1fe39e42633f2e389bf09c0a5399": {
+      "workers": {
+        "app/admin/services/page": {
+          "moduleId": "[project]/.next-internal/server/app/admin/services/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/admin/services/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_1",
+          "filename": "app/admin/services/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/services/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_1",
+      "filename": "app/admin/services/page.tsx"
+    },
+    "40900f9eeec4cb5d4d11b6c94ea1eedf750bfd5300": {
+      "workers": {
+        "app/admin/services/page": {
+          "moduleId": "[project]/.next-internal/server/app/admin/services/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/admin/services/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "app/admin/services/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/services/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "app/admin/services/page.tsx"
+    },
+    "40f604f0d803e39bd6f6f6d3239e995478d71dd3b0": {
+      "workers": {
+        "app/admin/services/page": {
+          "moduleId": "[project]/.next-internal/server/app/admin/services/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/admin/services/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_2",
+          "filename": "app/admin/services/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/services/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_2",
+      "filename": "app/admin/services/page.tsx"
+    }
+  },
+  "edge": {}
+}
