@@ -47,7 +47,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="text-2xl font-bold text-rose-600">
-              Салон Красоты
+            Салон красоты Багира
             </Link>
             <div className="hidden md:flex items-center gap-8">
               <Link href="/booking" className="text-gray-700 hover:text-rose-600 transition-colors">
@@ -99,10 +99,10 @@ export default async function HomePage() {
       <section className="py-20 px-4">
         <div className="container mx-auto text-center max-w-4xl">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-balance">
-            Ваша красота — наша страсть
+            Ваша красота — наша забота
           </h1>
           <p className="text-xl text-gray-600 mb-8 text-pretty">
-            Профессиональные услуги парикмахера с онлайн-записью. Опытные мастера, современные техники, индивидуальный
+            Профессиональные услуги салона красоты с онлайн-записью. Опытные мастера, современные техники, индивидуальный
             подход к каждому клиенту.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
@@ -315,9 +315,9 @@ export default async function HomePage() {
             <div>
               <h4 className="text-white font-semibold mb-4">Контакты</h4>
               <ul className="space-y-2 text-sm">
-                <li>+7 (999) 123-45-67</li>
+                <li>+7 (900) 557-39-00</li>
                 <li>info@salon.ru</li>
-                <li>г. Москва, ул. Примерная, 123</li>
+                <li>г. Вологда, ул. Северная, 10Б</li>
               </ul>
             </div>
             <div>
@@ -329,7 +329,7 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-            <p>&copy; 2025 Салон Красоты. Все права защищены.</p>
+            <p>&copy; 2026 Салон Красоты Багира. Все права защищены.</p>
           </div>
         </div>
       </footer>
