@@ -25,14 +25,11 @@ export default function RegisterPage() {
     setLoading(true)
     setError("")
 
-    // 1. Создаём пользователя в auth.users
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: {
-          name: name,
-        },
+        data: { name },
       },
     })
 
@@ -48,30 +45,8 @@ export default function RegisterPage() {
       return
     }
 
-    // 2. Если email требует подтверждения — отправляем на страницу check-email
-    // Проверяем, подтверждён ли email (если нет — Supabase скажет об этом)
-    if (authData.user.email_confirmed_at === null) {
-      router.push("/auth/check-email")
-      setLoading(false)
-      return
-    }
-
-    // 3. Если email уже подтверждён (например, в тестовом режиме), пробуем войти автоматически
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (signInError) {
-      // Если вход не удался, всё равно отправляем на главную
-      router.push("/")
-      setLoading(false)
-      return
-    }
-
-    // 4. Успешный вход — перенаправляем
-    const redirectUrl = new URLSearchParams(window.location.search).get("redirect") || "/"
-    router.push(redirectUrl)
+    // Если создание прошло успешно — сразу перенаправляем на главную
+    router.push("/")
     setLoading(false)
   }
 
