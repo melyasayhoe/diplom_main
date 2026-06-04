@@ -47,7 +47,7 @@ function LoginForm() {
       .maybeSingle()
 
     if (master) {
-      router.push("/master/dashboard")
+      router.push("/masters/dashboard")
       setLoading(false)
       return
     }
