@@ -25,19 +25,28 @@ export async function updateSession(request: NextRequest) {
     },
   )
 
+  // Получаем текущего пользователя
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Защищаем маршруты: /admin, /master, /client, /reviews/new
-  const protectedPaths = ["/admin", "/master", "/client", "/reviews/new"]
-  const isProtected = protectedPaths.some(path => request.nextUrl.pathname.startsWith(path))
+  // Список защищённых страниц (только для авторизованных)
+  const protectedPaths = ["/admin", "/client", "/master", "/reviews/new"]
+  const isProtected = protectedPaths.some((path) => request.nextUrl.pathname.startsWith(path))
 
+  // Публичные страницы (не требуют авторизации)
+  const publicPaths = ["/", "/booking", "/masters", "/services", "/reviews"]
+  const isPublic = publicPaths.some((path) => request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(path + "/"))
+
+  // Если страница защищена и пользователь не авторизован — отправляем на логин
   if (isProtected && !user) {
     const url = request.nextUrl.clone()
     url.pathname = "/auth/login"
     return NextResponse.redirect(url)
   }
+
+  // Если страница публичная — просто показываем (даже без авторизации)
+  // Все остальные страницы (например, /auth/*) тоже пропускаем
 
   return supabaseResponse
 }

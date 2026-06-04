@@ -31,9 +31,9 @@ export default function RegisterPage() {
       password,
       options: {
         data: {
-          name: name, // 👈 Имя сохраняется в metadata, чтобы триггер его подхватил
-        }
-      }
+          name: name,
+        },
+      },
     })
 
     if (authError) {
@@ -48,21 +48,28 @@ export default function RegisterPage() {
       return
     }
 
-    // 2. Автоматический вход (чтобы получить сессию)
+    // 2. Если email требует подтверждения — отправляем на страницу check-email
+    // Проверяем, подтверждён ли email (если нет — Supabase скажет об этом)
+    if (authData.user.email_confirmed_at === null) {
+      router.push("/auth/check-email")
+      setLoading(false)
+      return
+    }
+
+    // 3. Если email уже подтверждён (например, в тестовом режиме), пробуем войти автоматически
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
 
     if (signInError) {
-      setError("Ошибка при автоматическом входе: " + signInError.message)
+      // Если вход не удался, всё равно отправляем на главную
+      router.push("/")
       setLoading(false)
       return
     }
 
-    // ✅ Убрали ручную вставку в clients — теперь это делает триггер
-
-    // 3. Перенаправляем на страницу, с которой пришли (или на главную)
+    // 4. Успешный вход — перенаправляем
     const redirectUrl = new URLSearchParams(window.location.search).get("redirect") || "/"
     router.push(redirectUrl)
     setLoading(false)
