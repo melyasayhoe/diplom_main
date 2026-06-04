@@ -36,7 +36,6 @@ export default function LoginPage() {
       return
     }
 
-    // Успешный вход
     const userId = data.user.id
 
     // 1. Проверяем, является ли пользователь мастером
@@ -47,7 +46,7 @@ export default function LoginPage() {
       .maybeSingle()
 
     if (master) {
-      router.push("/masters/dashboard") // ✅ Исправлено с /master/dashboard на /masters/dashboard
+      router.push("/masters/dashboard")
       setLoading(false)
       return
     }
@@ -66,8 +65,7 @@ export default function LoginPage() {
     }
 
     // 3. Иначе — это клиент
-    // ✅ Исправленный блок: убрана проверка на "/master"
-    if (redirectTo.includes("/admin")) {
+    if (redirectTo.includes("/admin") || redirectTo.includes("/master")) {
       router.push("/client/dashboard")
     } else {
       router.push(redirectTo)
