@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import { Mail } from "lucide-react"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -19,6 +20,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [isEmailSent, setIsEmailSent] = useState(false)
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,9 +47,59 @@ export default function RegisterPage() {
       return
     }
 
-    // Если создание прошло успешно — сразу перенаправляем на главную
-    router.push("/")
+    // Если email требует подтверждения
+    if (authData.user.email_confirmed_at === null) {
+      setIsEmailSent(true)
+      setLoading(false)
+      return
+    }
+
+    // Если email уже подтверждён (тестовый режим), входим автоматически
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (signInError) {
+      // Если вход не удался, но пользователь создан — всё равно перенаправляем на главную
+      router.push("/")
+      setLoading(false)
+      return
+    }
+
+    const redirectUrl = new URLSearchParams(window.location.search).get("redirect") || "/"
+    router.push(redirectUrl)
     setLoading(false)
+  }
+
+  if (isEmailSent) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-rose-50 to-white flex items-center justify-center p-4">
+        <Card className="max-w-md w-full text-center">
+          <CardHeader>
+            <CardTitle>Проверьте почту</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex justify-center mb-4">
+              <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center">
+                <Mail className="w-6 h-6 text-rose-600" />
+              </div>
+            </div>
+            <p className="text-gray-600 mb-4">
+              Мы отправили письмо для подтверждения на <strong>{email}</strong>.
+            </p>
+            <p className="text-sm text-gray-500">
+              Пожалуйста, перейдите по ссылке в письме, чтобы завершить регистрацию.
+            </p>
+            <div className="mt-6">
+              <Link href="/auth/login">
+                <Button variant="outline" className="w-full">Войти после подтверждения</Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   return (
