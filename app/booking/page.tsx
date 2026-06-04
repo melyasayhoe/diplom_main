@@ -37,17 +37,16 @@ export default function BookingPage() {
   const [clientPhone, setClientPhone] = useState("")
   const [notes, setNotes] = useState("")
 
-  // Текущий пользователь
+  // Текущий пользователь (может быть null)
   const [user, setUser] = useState<any>(null)
-  const [loadingUser, setLoadingUser] = useState(true)
 
   useEffect(() => {
     const init = async () => {
+      // Получаем пользователя, но не блокируем страницу, если он не авторизован
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
-      setLoadingUser(false)
 
-      // Загружаем мастеров и услуги сразу
+      // Загружаем мастеров и услуги в любом случае
       loadMasters()
       loadServices()
 
@@ -143,10 +142,7 @@ export default function BookingPage() {
   }
 
   const handleNextStep = () => {
-    if (!user) {
-      router.push("/auth/login?redirect=/booking")
-      return
-    }
+    // Убрали проверку на user – теперь можно переходить без авторизации
     setStep(2)
   }
 
@@ -171,7 +167,7 @@ export default function BookingPage() {
         booking_time: selectedTime,
         notes: notes || null,
         status: "pending",
-        client_id: user?.id || null,
+        client_id: user?.id || null, // Если пользователь авторизован – привязываем
       })
 
       if (error) throw error
@@ -429,14 +425,6 @@ export default function BookingPage() {
                       rows={3}
                     />
                   </div>
-
-                  {!user && (
-                    <div className="mt-4 text-center">
-                      <Link href={`/auth/login?redirect=/booking`} className="text-rose-600 hover:underline">
-                        Уже есть аккаунт? Войдите, чтобы не вводить данные заново
-                      </Link>
-                    </div>
-                  )}
 
                   <div className="bg-rose-50 p-4 rounded-lg">
                     <h3 className="font-semibold mb-2">Подтверждение записи</h3>
