@@ -2,12 +2,10 @@ import { updateSession } from "@/lib/supabase/middleware"
 import type { NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
-  // Обновляем сессию (это обязательно для работы Supabase SSR)
   return await updateSession(request)
 }
 
 export const config = {
-  // Игнорируем статику и API, но обрабатываем все страницы
   matcher: [
     /*
      * Match all request paths except:
