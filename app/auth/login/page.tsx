@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, Suspense } from "react"
+import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -9,8 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 
-// Выносим всю логику в отдельный компонент
-function LoginForm() {
+export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get("redirect") || "/"
@@ -37,9 +36,10 @@ function LoginForm() {
       return
     }
 
+    // Успешный вход
     const userId = data.user.id
 
-    // 1. Проверяем мастера
+    // 1. Проверяем, является ли пользователь мастером
     const { data: master } = await supabase
       .from("masters")
       .select("id")
@@ -47,12 +47,12 @@ function LoginForm() {
       .maybeSingle()
 
     if (master) {
-      router.push("/masters/dashboard")
+      router.push("/masters/dashboard") // ✅ Исправлено с /master/dashboard на /masters/dashboard
       setLoading(false)
       return
     }
 
-    // 2. Проверяем админа
+    // 2. Проверяем, является ли пользователь админом
     const { data: admin } = await supabase
       .from("admin_users")
       .select("id")
@@ -65,8 +65,9 @@ function LoginForm() {
       return
     }
 
-    // 3. Клиент
-    if (redirectTo.includes("/admin") || redirectTo.includes("/master")) {
+    // 3. Иначе — это клиент
+    // ✅ Исправленный блок: убрана проверка на "/master"
+    if (redirectTo.includes("/admin")) {
       router.push("/client/dashboard")
     } else {
       router.push(redirectTo)
@@ -96,7 +97,7 @@ function LoginForm() {
             </Button>
             <div className="text-center text-sm">
               Нет аккаунта?{" "}
-              <Link href={`/auth/register?redirect=${redirectTo}`} className="text-rose-600 hover:underline">
+              <Link href="/auth/register" className="text-rose-600 hover:underline">
                 Зарегистрироваться
               </Link>
             </div>
@@ -104,14 +105,5 @@ function LoginForm() {
         </CardContent>
       </Card>
     </div>
-  )
-}
-
-// Основная страница, которая оборачивает форму в Suspense
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Загрузка...</div>}>
-      <LoginForm />
-    </Suspense>
   )
 }
