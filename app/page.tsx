@@ -226,7 +226,7 @@ export default async function HomePage() {
             <p className="text-gray-600 mb-6">
               Реальные отзывы наших клиентов вы можете посмотреть на Яндекс.Картах.
             </p>
-            <Link href="/reviews">
+            <Link href="https://yandex.ru/maps/org/bagira/1738198957/reviews/" target="_blank" rel="noopener noreferrer">
               <Button variant="outline" size="lg">
                 Все отзывы
               </Button>
