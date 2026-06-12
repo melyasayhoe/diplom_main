@@ -3,7 +3,6 @@ import { createClient } from "@/lib/supabase/server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Star, Clock, Award, Heart } from "lucide-react"
-import { getYandexReviews } from "@/lib/yandex"
 
 export const dynamic = 'force-dynamic'
 
@@ -29,10 +28,6 @@ export default async function HomePage() {
     .order("category", { ascending: true })
 
   const categories = services ? Array.from(new Set(services.map((s) => s.category))) : []
-
-  // Fetch real reviews from Yandex Maps
-  const yandexReviews = await getYandexReviews()
-  const mainReviews = yandexReviews.slice(0, 3) // Берем только 3 для главной
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
@@ -227,42 +222,30 @@ export default async function HomePage() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Отзывы клиентов</h2>
-          {mainReviews.length > 0 ? (
-            <div className="grid md:grid-cols-3 gap-8">
-              {mainReviews.map((review: any, index: number) => (
-                <Card key={index} className="border-2 hover:shadow-lg transition-shadow">
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-1 mb-3">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-gray-700 mb-4 italic">"{review.text}"</p>
-                    <div className="border-t pt-3">
-                      <p className="font-semibold">{review.authorName || "Аноним"}</p>
-                      <p className="text-sm text-gray-600">
-                        {review.createdAt ? new Date(review.createdAt).toLocaleDateString("ru-RU") : ""}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+          <div className="flex flex-col items-center gap-6">
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '300px',
+                height: '150px',
+                overflow: 'hidden',
+                position: 'relative'
+              }}
+            >
+              <iframe
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: '1px solid #e6e6e6',
+                  borderRadius: '8px',
+                  boxSizing: 'border-box'
+                }}
+                src="https://yandex.ru/maps-reviews-widget/1738198957"
+                allowFullScreen
+              ></iframe>
             </div>
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-gray-600">Отзывы временно недоступны.</p>
-            </div>
-          )}
-          <div className="text-center mt-8">
-            <Link href="/reviews">
-              <Button variant="outline" size="lg">
-                Все отзывы
-              </Button>
+            <Link href="/reviews" className="text-rose-600 hover:text-rose-700">
+              Все отзывы
             </Link>
           </div>
         </div>
