@@ -222,28 +222,22 @@ export default async function HomePage() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Отзывы клиентов</h2>
-          <div className="flex flex-col items-center gap-6">
-            <div
-              style={{
-                width: '100%',
-                maxWidth: '300px',
-                height: '150px',
-                overflow: 'hidden',
-                position: 'relative'
-              }}
-            >
-              <iframe
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: '1px solid #e6e6e6',
-                  borderRadius: '8px',
-                  boxSizing: 'border-box'
-                }}
-                src="https://yandex.ru/maps-reviews-widget/1738198957"
-                allowFullScreen
-              ></iframe>
-            </div>
+          <div className="flex justify-center">
+            {/* Оборачиваем виджет в карточку, чтобы он не выглядел как инородный блок */}
+            <Card className="w-full max-w-md border-2 shadow-lg overflow-hidden">
+              <CardContent className="p-0">
+                <div className="w-full h-[150px] bg-white relative">
+                  <iframe 
+                    src="https://yandex.ru/maps-reviews-widget/1738198957"
+                    className="w-full h-full border-none"
+                    allowFullScreen
+                    style={{ display: 'block' }}
+                  ></iframe>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="text-center mt-6">
             <Link href="/reviews" className="text-rose-600 hover:text-rose-700">
               Все отзывы
             </Link>
