@@ -16,6 +16,8 @@ import Link from "next/link"
 import { ArrowLeft, Check } from "lucide-react"
 import type { Master, Service } from "@/lib/types"
 
+export const dynamic = 'force-dynamic'
+
 export default function BookingPage() {
   const router = useRouter()
   const supabase = createClient()
@@ -342,7 +344,14 @@ export default function BookingPage() {
                       mode="single"
                       selected={selectedDate}
                       onSelect={setSelectedDate}
-                      disabled={(date) => date < new Date() || date.getDay() === 0}
+                      disabled={(date) => {
+                        // Сбрасываем время у текущей даты на полночь, чтобы сравнивать только дни
+                        const today = new Date()
+                        today.setHours(0, 0, 0, 0)
+                        
+                        // Блокируем прошедшие дни и воскресенье, но разрешаем сегодня
+                        return date < today || date.getDay() === 0
+                      }}
                       className="rounded-md border w-full"
                     />
                   </div>
