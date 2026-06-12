@@ -16,6 +16,7 @@ import Link from "next/link"
 import { ArrowLeft, Check } from "lucide-react"
 import type { Master, Service } from "@/lib/types"
 
+// ОТКЛЮЧАЕМ КЭШИРОВАНИЕ СТРАНИЦЫ (ВАЖНО!)
 export const dynamic = 'force-dynamic'
 
 export default function BookingPage() {
@@ -104,11 +105,10 @@ export default function BookingPage() {
       return
     }
 
-    // Получаем текущее время и добавляем 3 часа
     const now = new Date()
     const threeHoursFromNow = new Date(now.getTime() + 3 * 60 * 60 * 1000)
 
-    // Проверяем, выбран ли сегодняшний день
+    // Нормализуем даты для корректного сравнения
     const todayStr = now.toISOString().split('T')[0]
     const selectedDateStr = selectedDate.toISOString().split('T')[0]
     const isToday = selectedDateStr === todayStr
@@ -129,7 +129,7 @@ export default function BookingPage() {
       for (let minute = 0; minute < 60; minute += 30) {
         const timeStr = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
         
-        // Если выбран сегодняшний день, проверяем, что время не раньше чем через 3 часа
+        // Если выбран СЕГОДНЯШНИЙ день, проверяем ограничение +3 часа
         if (isToday) {
           const slotTime = new Date(now)
           slotTime.setHours(hour, minute, 0, 0)
