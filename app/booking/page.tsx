@@ -14,9 +14,9 @@ import { Calendar } from "@/components/ui/calendar"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, Check } from "lucide-react"
+import { isToday } from "date-fns"  // ✅ ИСПОЛЬЗУЕМ БИБЛИОТЕКУ ДЛЯ СРАВНЕНИЯ ДАТ
 import type { Master, Service } from "@/lib/types"
 
-// ОТКЛЮЧАЕМ КЭШИРОВАНИЕ СТРАНИЦЫ (ВАЖНО!)
 export const dynamic = 'force-dynamic'
 
 export default function BookingPage() {
@@ -108,10 +108,8 @@ export default function BookingPage() {
     const now = new Date()
     const threeHoursFromNow = new Date(now.getTime() + 3 * 60 * 60 * 1000)
 
-    // Нормализуем даты для корректного сравнения
-    const todayStr = now.toISOString().split('T')[0]
-    const selectedDateStr = selectedDate.toISOString().split('T')[0]
-    const isToday = selectedDateStr === todayStr
+    // ✅ КОРРЕКТНОЕ ОПРЕДЕЛЕНИЕ СЕГОДНЯШНЕГО ДНЯ
+    const today = isToday(selectedDate)
 
     const dateStr = selectedDate.toISOString().split("T")[0]
     const { data: bookings } = await supabase
@@ -129,8 +127,8 @@ export default function BookingPage() {
       for (let minute = 0; minute < 60; minute += 30) {
         const timeStr = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
         
-        // Если выбран СЕГОДНЯШНИЙ день, проверяем ограничение +3 часа
-        if (isToday) {
+        // ✅ ПРОВЕРКА +3 ЧАСА ТОЛЬКО ДЛЯ СЕГОДНЯ
+        if (today) {
           const slotTime = new Date(now)
           slotTime.setHours(hour, minute, 0, 0)
           
@@ -345,11 +343,8 @@ export default function BookingPage() {
                       selected={selectedDate}
                       onSelect={setSelectedDate}
                       disabled={(date) => {
-                        // Сбрасываем время у текущей даты на полночь, чтобы сравнивать только дни
                         const today = new Date()
                         today.setHours(0, 0, 0, 0)
-                        
-                        // Блокируем прошедшие дни и воскресенье, но разрешаем сегодня
                         return date < today || date.getDay() === 0
                       }}
                       className="rounded-md border w-full"
