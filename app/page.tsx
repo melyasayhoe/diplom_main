@@ -224,26 +224,7 @@ export default async function HomePage() {
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Отзывы клиентов</h2>
           <div className="flex justify-center">
-            {/* Виджет с уникальным стилем для устранения серого фона */}
-            <div className="bg-white rounded-xl shadow-lg p-4 w-full max-w-xs overflow-hidden relative">
-              <div className="absolute inset-0 bg-white z-0"></div>
-              <div className="relative z-10 w-full h-[150px]">
-                <iframe
-                  src="https://yandex.ru/maps-reviews-widget/1738198957"
-                  className="w-full h-full border-none"
-                  style={{
-                    backgroundColor: 'transparent',
-                    mixBlendMode: 'multiply',
-                  }}
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </div>
-          </div>
-          <div className="text-center mt-6">
-            <Link href="https://yandex.ru/maps/org/bagira/1738198957/reviews/" target="_blank" className="text-rose-600 hover:text-rose-700">
-              Все отзывы на Яндекс.Картах
-            </Link>
+            <YandexRating oid="1738198957" />
           </div>
         </div>
       </section>
