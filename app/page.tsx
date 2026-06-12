@@ -3,7 +3,6 @@ import { createClient } from "@/lib/supabase/server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Star, Clock, Award, Heart } from "lucide-react"
-import { YandexRating } from "@/components/YandexRating"
 
 export const dynamic = 'force-dynamic'
 
@@ -29,6 +28,37 @@ export default async function HomePage() {
     .order("category", { ascending: true })
 
   const categories = services ? Array.from(new Set(services.map((s) => s.category))) : []
+
+  // Реальные отзывы (из твоих скриншотов)
+  const reviewsData = [
+    {
+      id: 1,
+      author: "Татьяна Белехова",
+      avatar: "🦉",
+      level: "Знаток города 11 уровня",
+      rating: 5,
+      text: "Светлый магазин. Цены выше среднего. Персонал отзывчивый.",
+      date: "25 декабря 2019"
+    },
+    {
+      id: 2,
+      author: "Роман Максимов",
+      avatar: "🧔",
+      level: "Знаток города 15 уровня",
+      rating: 5,
+      text: "Прекрасно стригут!",
+      date: "15 мая 2020"
+    },
+    {
+      id: 3,
+      author: "Y",
+      avatar: "🦄",
+      level: "Знаток города 6 уровня",
+      rating: 5,
+      text: "Очень нравятся девушки парикмахеры Юля и Аня, опытные и вежливые 🌹",
+      date: "21 мая 2025"
+    }
+  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
@@ -223,8 +253,34 @@ export default async function HomePage() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Отзывы клиентов</h2>
-          <div className="flex justify-center">
-            <YandexRating oid="1738198957" />
+          <div className="grid md:grid-cols-3 gap-8">
+            {reviewsData.map((review) => (
+              <Card key={review.id} className="border-2 hover:shadow-lg transition-shadow">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-1 mb-3">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-4 italic">"{review.text}"</p>
+                  <div className="border-t pt-3">
+                    <p className="font-semibold">{review.author}</p>
+                    <p className="text-sm text-gray-600">{review.level}</p>
+                    <p className="text-xs text-gray-400">{review.date}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link href="/reviews">
+              <Button variant="outline" size="lg">
+                Все отзывы
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
