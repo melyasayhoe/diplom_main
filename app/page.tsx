@@ -29,17 +29,6 @@ export default async function HomePage() {
 
   const categories = services ? Array.from(new Set(services.map((s) => s.category))) : []
 
-  // Fetch recent approved reviews
-  const { data: reviews } = await supabase
-    .from("reviews")
-    .select(`
-      *,
-      master:masters(name)
-    `)
-    .eq("is_approved", true)
-    .order("created_at", { ascending: false })
-    .limit(3)
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
       {/* Navigation */}
@@ -47,7 +36,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="text-2xl font-bold text-rose-600">
-            Салон красоты Багира
+              Салон красоты Багира
             </Link>
             <div className="hidden md:flex items-center gap-8">
               <Link href="/booking" className="text-gray-700 hover:text-rose-600 transition-colors">
@@ -233,28 +222,10 @@ export default async function HomePage() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Отзывы клиентов</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {reviews?.map((review) => (
-              <Card key={review.id} className="border-2">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-1 mb-3">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 mb-4 italic">"{review.comment}"</p>
-                  <div className="border-t pt-3">
-                    <p className="font-semibold">{review.client_name}</p>
-                    <p className="text-sm text-gray-600">Мастер: {review.master?.name}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-8">
+          <div className="text-center">
+            <p className="text-gray-600 mb-6">
+              Реальные отзывы наших клиентов вы можете посмотреть на Яндекс.Картах.
+            </p>
             <Link href="/reviews">
               <Button variant="outline" size="lg">
                 Все отзывы
