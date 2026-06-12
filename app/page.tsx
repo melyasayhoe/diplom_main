@@ -334,18 +334,20 @@ export default async function HomePage() {
               </ul>
             </div>
             <div>
+              <h4 className="text-white font-semibold mb-4">Юридическая информация</h4>
+              <ul className="space-y-2 text-sm">
+                <li>ИП Мельник И.А.</li>
+                <li>г. Вологда, ул. Северная, 10Б</li>
+                <li>info@salon.ru</li>
+                <li><Link href="/privacy" className="hover:text-white">Политика обработки ПДн</Link></li>
+              </ul>
+            </div>
+            <div>
               <h4 className="text-white font-semibold mb-4">Контакты</h4>
               <ul className="space-y-2 text-sm">
                 <li>+7 (900) 557-39-00</li>
                 <li>info@salon.ru</li>
                 <li>г. Вологда, ул. Северная, 10Б</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Часы работы</h4>
-              <ul className="space-y-2 text-sm">
-                <li>Пн-Сб: 9:00 - 19:00</li>
-                <li>Воскресенье: выходной</li>
               </ul>
             </div>
           </div>
