@@ -42,15 +42,11 @@ export default function BookingPage() {
 
   useEffect(() => {
     const init = async () => {
-      // Получаем пользователя, но не блокируем страницу, если он не авторизован
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
-
-      // Загружаем мастеров и услуги в любом случае
       loadMasters()
       loadServices()
 
-      // Если пользователь авторизован, подтягиваем его данные из профиля
       if (user) {
         const { data: profile } = await supabase
           .from("profiles")
@@ -106,6 +102,15 @@ export default function BookingPage() {
       return
     }
 
+    // Получаем текущее время и добавляем 3 часа
+    const now = new Date()
+    const threeHoursFromNow = new Date(now.getTime() + 3 * 60 * 60 * 1000)
+
+    // Проверяем, выбран ли сегодняшний день
+    const todayStr = now.toISOString().split('T')[0]
+    const selectedDateStr = selectedDate.toISOString().split('T')[0]
+    const isToday = selectedDateStr === todayStr
+
     const dateStr = selectedDate.toISOString().split("T")[0]
     const { data: bookings } = await supabase
       .from("bookings")
@@ -121,6 +126,17 @@ export default function BookingPage() {
     for (let hour = start; hour < end; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
         const timeStr = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`
+        
+        // Если выбран сегодняшний день, проверяем, что время не раньше чем через 3 часа
+        if (isToday) {
+          const slotTime = new Date(now)
+          slotTime.setHours(hour, minute, 0, 0)
+          
+          if (slotTime < threeHoursFromNow) {
+            continue // Пропускаем слоты, которые раньше чем через 3 часа
+          }
+        }
+        
         times.push(timeStr)
       }
     }
@@ -142,7 +158,6 @@ export default function BookingPage() {
   }
 
   const handleNextStep = () => {
-    // Убрали проверку на user – теперь можно переходить без авторизации
     setStep(2)
   }
 
@@ -167,7 +182,7 @@ export default function BookingPage() {
         booking_time: selectedTime,
         notes: notes || null,
         status: "pending",
-        client_id: user?.id || null, // Если пользователь авторизован – привязываем
+        client_id: user?.id || null,
       })
 
       if (error) throw error
