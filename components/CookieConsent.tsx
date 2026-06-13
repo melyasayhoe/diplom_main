@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -7,16 +7,21 @@ export function CookieConsent() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
+    console.log("CookieConsent: useEffect запущен")
     const consent = localStorage.getItem('cookieConsent')
-    if (!consent) setShow(true)
+    console.log("CookieConsent: consent =", consent)
+    if (!consent) {
+      console.log("CookieConsent: setShow(true)")
+      setShow(true)
+    }
   }, [])
 
-  const accept = () => {
-    localStorage.setItem('cookieConsent', 'true')
-    setShow(false)
-  }
+  console.log("CookieConsent: рендер, show =", show)
 
-  if (!show) return null
+  if (!show) {
+    console.log("CookieConsent: return null")
+    return null
+  }
 
   return (
     <div className="fixed bottom-4 left-4 right-4 max-w-md mx-auto bg-white border border-gray-200 shadow-xl rounded-lg p-4 z-50">
@@ -25,7 +30,10 @@ export function CookieConsent() {
       </p>
       <div className="flex gap-3">
         <button
-          onClick={accept}
+          onClick={() => {
+            localStorage.setItem('cookieConsent', 'true')
+            setShow(false)
+          }}
           className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-md text-sm font-medium"
         >
           Принять
