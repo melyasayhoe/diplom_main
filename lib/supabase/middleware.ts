@@ -40,6 +40,7 @@ export async function updateSession(request: NextRequest) {
     "/reviews",
     "/auth",
     "/api",
+    "/privacy",
   ]
 
   const isPublic = publicPaths.some(p => path === p || path.startsWith(p + "/"))
